@@ -1,5 +1,5 @@
 class Robot
-  attr_accessor :coordinate, :facing, :currently_placing, :successfully_placed
+  attr_accessor :coordinates, :facing, :currently_placing, :successfully_placed
   
   COMMANDS = [:place, :move, :left, :right, :report]
   
@@ -25,10 +25,22 @@ class Robot
   
   def place(x:, y:, facing:)
     if valid_place_command?(x, y, facing)
-      self.coordinate = Coordinate.new(x, y)
+      self.coordinates = Coordinates.new(x, y)
       self.facing = Facing.new(facing)
       self.successfully_placed = true
     end
+  end
+  
+  def move
+    self.coordinates.move(self.facing.direction)
+  end
+  
+  def left
+    self.facing.left_turn
+  end
+  
+  def right
+    self.facing.right_turn
   end
   
   private
@@ -37,7 +49,7 @@ class Robot
   end
   
   def valid_place_command?(x, y, facing)
-    Coordinate.new(x,y).is_valid? &&
+    Coordinates.new(x,y).is_valid? &&
     Facing.new(facing).is_valid?
   end
 end
