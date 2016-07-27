@@ -52,44 +52,89 @@ describe Robot do
   context "after a valid 'place' command is executed" do
     # Left Turn
     it 'should change its facing direction from north to west when turning left' do
-      place = "PLACE 1,2,NORTH"
+      place = 'PLACE 1,2,NORTH'
       expect { robot.execute("#{place} LEFT") }.to change { robot.facing }.from('north').to('west')
     end
     
     it 'should change its facing direction from west to south when turning left' do
-      place = "PLACE 1,2,WEST"
+      place = 'PLACE 1,2,WEST'
       expect { robot.execute("#{place} LEFT") }.to change { robot.facing }.from('west').to('south')
     end
     
     it 'should change its facing direction from south to east when turning left' do
-      place = "PLACE 1,2,SOUTH"
+      place = 'PLACE 1,2,SOUTH'
       expect { robot.execute("#{place} LEFT") }.to change { robot.facing }.from('south').to('east')
     end
     
     it 'should change its facing direction from east to north when turning left' do
-      place = "PLACE 1,2,EAST"
+      place = 'PLACE 1,2,EAST'
       expect { robot.execute("#{place} LEFT") }.to change { robot.facing }.from('east').to('north')
     end
     
     # Right Turn
     it 'should change its facing direction from north to east when turning right' do
-      place = "PLACE 1,2,NORTH"
+      place = 'PLACE 1,2,NORTH'
       expect { robot.execute("#{place} RIGHT") }.to change { robot.facing }.from('north').to('east')
     end
     
     it 'should change its facing direction from east to south when turning right' do
-      place = "PLACE 1,2,EAST"
+      place = 'PLACE 1,2,EAST'
       expect { robot.execute("#{place} RIGHT") }.to change { robot.facing }.from('east').to('south')
     end
     
     it 'should change its facing direction from south to west when turning right' do
-      place = "PLACE 1,2,SOUTH"
+      place = 'PLACE 1,2,SOUTH'
       expect { robot.execute("#{place} RIGHT") }.to change { robot.facing }.from('south').to('west')
     end
     
     it 'should change its facing direction from west to north when turning right' do
-      place = "PLACE 1,2,WEST"
+      place = 'PLACE 1,2,WEST'
       expect { robot.execute("#{place} RIGHT") }.to change { robot.facing }.from('west').to('north')
+    end
+    
+    # Move
+    context "when a 'move' command is issued" do
+      it 'should move north when facing north' do
+        place = 'PLACE 1,2,NORTH'
+        expect { robot.execute("#{place} MOVE") }.to change { robot.coordinates.y }.by(1)
+      end
+      
+      it 'should move east when facing east' do
+        place = 'PLACE 1,2,EAST'
+        expect { robot.execute("#{place} MOVE") }.to change { robot.coordinates.x }.by(1)
+      end
+      
+      it 'should move south when facing south' do
+        place = 'PLACE 1,2,SOUTH'
+        expect { robot.execute("#{place} MOVE") }.to change { robot.coordinates.y }.by(-1)
+      end
+      
+      it 'should move west when facing west' do
+        place = 'PLACE 1,2,WEST'
+        expect { robot.execute("#{place} MOVE") }.to change { robot.coordinates.x }.by(-1)
+      end
+      
+      context 'when the robot is on the edge of the grid' do
+        it 'should not be able to move north when its at the northern most point in the grid' do
+          place = 'PLACE 2,5,NORTH'
+          expect { robot.execute("#{place} MOVE") }.to_not change { robot.coordinates.y }
+        end
+        
+        it 'should not be able to move east when its at the eastern most point in the grid' do
+          place = 'PLACE 5,3,EAST'
+          expect { robot.execute("#{place} MOVE") }.to_not change { robot.coordinates.x }
+        end
+        
+        it 'should not be able to move south when its at the southern most point in the grid' do
+          place = 'PLACE 3,0,SOUTH'
+          expect { robot.execute("#{place} MOVE") }.to_not change { robot.coordinates.y }
+        end
+        
+        it 'should not be able to move west when its at the western most point in the grid' do
+          place = 'PLACE 3,0,WEST'
+          expect { robot.execute("#{place} MOVE") }.to_not change { robot.coordinates.x }
+        end
+      end
     end
   end
 end
