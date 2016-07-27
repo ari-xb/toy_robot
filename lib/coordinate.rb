@@ -14,11 +14,15 @@ class Coordinates
   end
 
   def is_valid?
-    self.x.is_a(Integer) && X_RANGE.include?(self.x) &&
-    self.y.is_a(Integer) && Y_RANGE.include?(self.y)
+    self.x.to_s.match(/[0-9]/) && X_RANGE.include?(self.x.to_i) &&
+    self.y.to_s.match(/[0-9]/) && Y_RANGE.include?(self.y.to_i)
   end
   
   private
+  def to_s
+    "#{self.x},#{self.y}"
+  end
+  
   def move_north
     self.y < Y_RANGE.max && self.y += 1
   end

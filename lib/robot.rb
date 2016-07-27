@@ -2,7 +2,7 @@ class Robot
   attr_accessor :coordinates, :facing, :currently_placing, :successfully_placed
   
   COMMANDS = [:place, :move, :left, :right, :report]
-  
+
   def initialize
     self.currently_placing = false
     self.successfully_placed = false
@@ -12,7 +12,7 @@ class Robot
     commands.each do |cmd|
       if self.currently_placing
         cmd = cmd.split(',')
-        place(x: cmd[0].to_i, y: cmd[1].to_i, facing: cmd[2].to_sym)
+        place(x: cmd[0], y: cmd[1], facing: cmd[2].to_sym)
         self.currently_placing = false
       elsif cmd.to_sym == :place
         self.currently_placing = true
@@ -25,7 +25,7 @@ class Robot
   
   def place(x:, y:, facing:)
     if valid_place_command?(x, y, facing)
-      self.coordinates = Coordinates.new(x, y)
+      self.coordinates = Coordinates.new(x.to_i, y.to_i)
       self.facing = Facing.new(facing)
       self.successfully_placed = true
     end
@@ -43,7 +43,15 @@ class Robot
     self.facing.right_turn
   end
   
+  def report
+    puts self
+  end
+  
   private
+  def to_s
+    "Output: #{self.coordinates},#{self.facing}\n"
+  end
+  
   def valid_command?(cmd)
     COMMANDS.include?(cmd.to_sym)
   end

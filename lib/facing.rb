@@ -20,6 +20,10 @@ class Facing
   end
   
   private
+  def to_s
+    "#{self.direction.to_s.upcase}"
+  end
+  
   def turn(direction)
     facing_index = FACING.index(self.direction)
     self.direction = FACING.rotate(direction)[facing_index]
