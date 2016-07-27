@@ -13,19 +13,19 @@ describe Robot do
       expect(robot.facing).to be_nil
     end
     
-    it 'should not allow the robot to move' do
+    it 'should not be allowed to move' do
       expect { robot.execute('MOVE') }.to_not change { robot.coordinates }
     end
     
-    it 'should not allow the robot to turn left' do
+    it 'should not be allowed to turn left' do
       expect { robot.execute('LEFT') }.to_not change { robot.facing }
     end
     
-    it 'should not allow the robot to turn right' do
+    it 'should not be allowed to turn right' do
       expect { robot.execute('RIGHT') }.to_not change { robot.facing }
     end
     
-    it 'should not allow the robot to report its position' do
+    it 'should not be allowed to report its position' do
       expect($stdout).to_not receive(:write)
       robot.execute('REPORT')
     end
@@ -50,6 +50,24 @@ describe Robot do
   end
   
   context "after a valid 'place' command is executed" do
+    # Place
+    it 'should be able to be placed again' do
+      robot.execute('PLACE 1,2,NORTH MOVE PLACE 2,3,SOUTH REPORT')
+      expect(robot.coordinates.y).to eq(3)
+    end
+    
+    # Random Commands
+    it 'should ignore commands other than place, move, left, right and report' do
+      robot.execute('PLACE 1,3,NORTH RANDOM MOVE REPORT')
+      expect(robot.coordinates.y).to eq(4)
+    end
+    
+    # Report
+    it 'should be able to report its position' do
+      expect($stdout).to receive(:write)
+      robot.execute('PLACE 1,2,NORTH REPORT')
+    end
+    
     # Left Turn
     it 'should change its facing direction from north to west when turning left' do
       place = 'PLACE 1,2,NORTH'
